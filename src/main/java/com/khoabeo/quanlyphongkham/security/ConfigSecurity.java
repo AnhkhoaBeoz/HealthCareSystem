@@ -2,6 +2,9 @@ package com.khoabeo.quanlyphongkham.security;
 
 import com.khoabeo.quanlyphongkham.jwt.JwtAuthFilter;
 import com.khoabeo.quanlyphongkham.jwt.JwtAuthenticationEntryPoint;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -27,6 +30,12 @@ import java.util.List;
 
 @Service
 @EnableWebSecurity
+@SecurityScheme(
+        name = "Bear Authentication",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 public class ConfigSecurity {
     private JwtAuthenticationEntryPoint authenticationEntryPoint;
     private JwtAuthFilter jwtAuthFilter;
@@ -55,6 +64,8 @@ public class ConfigSecurity {
                 .anonymous(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(author ->
                 {
+                    author.requestMatchers("/swagger-ui/**").permitAll();
+                    author.requestMatchers("/v3/api-docs/**").permitAll();
                     author.requestMatchers(HttpMethod.GET, "/v1/api/doctors/**", "/v1/api/nurses/**").permitAll(); // Cho phép tất cả các phương thức GET của v1/api/doctors
                     author.requestMatchers("/v1/api/roles/**").hasRole("ADMIN"); // Chỉ cho phép ADMIN truy cập các phương thức khác của v1/api/doctors
                     author.requestMatchers("/v1/api/doctors/**").hasRole("ADMIN"); // Chỉ cho phép ADMIN truy cập các phương thức khác của v1/api/doctors
@@ -62,7 +73,7 @@ public class ConfigSecurity {
                     author.requestMatchers("/v1/api/accounts/**").hasRole("ADMIN");
                     author.requestMatchers("/v1/api/patients/**").hasRole("ADMIN");
                     author.requestMatchers("/v1/api/auth/**").permitAll();
-                    author.requestMatchers(HttpMethod.GET, "/v1/api/dutyschedules/**").hasAnyRole("DOCTOR", "NURSE","ADMIN");
+                    author.requestMatchers(HttpMethod.GET, "/v1/api/dutyschedules/**").hasAnyRole("DOCTOR", "NURSE", "ADMIN");
                     author.requestMatchers("/v1/api/dutyschedules/**").hasRole("ADMIN");
                     author.requestMatchers("/v1/api/appointment/register").hasRole("PATIENT");
                 })

@@ -9,6 +9,7 @@ import com.khoabeo.quanlyphongkham.mapper.SimpleMapper;
 import com.khoabeo.quanlyphongkham.service.DoctorService;
 import com.khoabeo.quanlyphongkham.service.DutyScheduleService;
 import com.khoabeo.quanlyphongkham.service.NurseService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,9 @@ public class DutyScheduleController {
         this.doctorService = doctorService;
         this.nurseService = nurseService;
     }
-
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @GetMapping("/")
     public DutyScheduleResponse getAllDutySchedule(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
@@ -39,14 +42,18 @@ public class DutyScheduleController {
 
         return this.dutyScheduleService.getAllDutySchedules(pageNo, pageSize, sortBy, sortDir);
     }
-
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @PostMapping("/createSchedule")
     public ResponseEntity<String> createDutySchedule(@RequestBody DutyScheduleRequest request) {
         Doctor doctor = SimpleMapper.MAPPER.doctorDTOToDoctor(this.doctorService.getDoctorByID(request.getDoctorId()));
         Nurse nurse = SimpleMapper.MAPPER.nurseDTOToNurse(this.nurseService.getNurseByID(request.getNurseId()));
         return ResponseEntity.ok(this.dutyScheduleService.createDutySchedule(doctor, nurse, request.getScheduleDate(), request.getShift()));
     }
-
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @PutMapping("/updateSchedule/{id}")
     public ResponseEntity<String> updateDutySchedule(@PathVariable Long id, @RequestBody DutyScheduleRequest dutyScheduleRequest) {
 
