@@ -2,6 +2,7 @@ package com.khoabeo.quanlyphongkham.controller;
 
 import com.khoabeo.quanlyphongkham.dto.DoctorDTO;
 import com.khoabeo.quanlyphongkham.service.DoctorService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,18 +26,25 @@ public class DoctorController {
         return ResponseEntity.ok(this.doctorService.getDoctorByID(id));
     }
 
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @PostMapping("/addDoctor")
     public ResponseEntity<String> addDoctor(@RequestBody DoctorDTO doctorDTO) {
         String result = this.doctorService.addDoctor(doctorDTO);
         return ResponseEntity.ok(result);
     }
-
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateDoctor(@PathVariable long id, @RequestBody DoctorDTO doctorDTO) {
         String result = this.doctorService.updateDoctor(id, doctorDTO);
         return ResponseEntity.ok(result);
     }
-
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable long id) {
         String result = this.doctorService.deleteDoctor(id);
