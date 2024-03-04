@@ -2,6 +2,7 @@ Account for test:
   -username:admin
   -password:123123
   -role:ROLE_ADMIN
+
 Dự án này yêu cầu một hệ thống quản lý phòng mạch với các chức năng đa dạng cho các đối tượng khác nhau như admin, bác sĩ, y tá và bệnh nhân. Dưới đây là một mô tả tổng quan về cách triển khai các tính năng này trong một ứng dụng sử dụng Spring Boot, JWT và Spring Security:
 
 1.Đăng nhập và phân quyền:
